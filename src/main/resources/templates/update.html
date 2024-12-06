@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit user</title>
+</head>
+<body>
+<form th:method="PATCH" th:action="@{/admin/save(id=${user.id})}" th:object="${user}">
+    <input placeholder="User name:" type="text" required th:field="*{username}" id="User name"/>
+    <br>
+    <br>
+    <input placeholder="e-mail:" type="text" required th:field="*{email}" id="Email"/>
+    <br>
+    <br>
+    <input placeholder="Password:" type="text" required th:field="*{password}" id="Password"/>
+    <br>
+    <br>
+    <input type="hidden" name="role"
+           th:if="${not #lists.isEmpty(user.roles)}"
+           th:value="${user.roles[0].role}"/>
+    <br>
+    <input type="submit" value="Update!"/>
+    <br>
+    <br>
+</form>
+<table>
+    <tbody>
+    <tr th:each="role :${user.roles}">
+        <td th:text="${role.role}"></td>
+        <td>
+
+            <form th:method="POST" th:action="@{/admin/removeRole}">
+                <input type="hidden" name="_method" value="DELETE"/>
+                <input type="hidden" name="userId" th:value="${user.id}"/>
+                <input type="hidden" name="roleId" th:value="${role.id}"/>
+                <input type="submit" value="DELETE"/>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<br>
+<br>
+
+<form th:method="POST" th:action="@{/admin/addRole}">
+    <input type="hidden" name="_method" value="PATCH"/>
+    <input type="hidden" name="userId" th:value="${user.id}"/>
+    <label for="Role">Role:</label>
+    <select name="roleId" id="Role">
+        <option value="ROLE_USER">ROLE_USER</option>
+        <option value="ROLE_ADMIN">ROLE_ADMIN</option>
+    </select>
+    <input type="submit" value="ADD ROLE"/>
+</form>
+<br>
+<br>
+<input type="button" onclick="history.back();" value="Назад"/>
+
+</body>
+</html>
+
+

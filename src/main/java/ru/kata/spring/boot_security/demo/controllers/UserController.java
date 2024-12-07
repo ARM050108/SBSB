@@ -30,7 +30,7 @@ public class UserController {
         User user = userService.findByUsername(username);
 
         model.addAttribute("user", user);
-        return "showUser";
+        return "user";
     }
 
 }

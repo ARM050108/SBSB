@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
-import ru.kata.spring.boot_security.demo.repository.RoleRepository;
 import ru.kata.spring.boot_security.demo.repository.UserRepository;
 
 import java.util.List;
@@ -16,16 +15,15 @@ import java.util.List;
 @Transactional
 public class UserServiceImpl implements UserService {
 
-    private final RoleRepository roleRepository;
+
     private final PasswordEncoder passwordEncoder;
-    private UserRepository userRepository;
-    private ApplicationContext context;
+    private final UserRepository userRepository;
+    private final ApplicationContext context;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, ApplicationContext context, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, ApplicationContext context, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.context = context;
-        this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -50,8 +48,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void update(long id, User updatedUser, String role) throws NullPointerException {
-
+    public void update(long id, User updatedUser, List<Role> roles) throws NullPointerException {
         User localUser = userRepository.getById(id);
 
         if (!localUser.getPassword().equals(updatedUser.getPassword())) {
@@ -59,13 +56,8 @@ public class UserServiceImpl implements UserService {
         }
         localUser.setUsername(updatedUser.getUsername());
         localUser.setEmail(updatedUser.getEmail());
-        Role newRole = roleRepository.getRoleByName(role);
+        localUser.setRoles(roles);
 
-        if (!localUser.getRoles().contains(newRole)) {
-            List<Role> newRoles = localUser.getRoles();
-            newRoles.add(newRole);
-            localUser.setRoles(newRoles);
-        }
     }
 
     @Override

@@ -28,7 +28,6 @@ public class Init implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-
         List<Role> firstUserRole = new ArrayList<>();
         List<Role> secondUserRole = new ArrayList<>();
 
@@ -44,10 +43,7 @@ public class Init implements CommandLineRunner {
         User firstUser = new User("Alisher", passwordEncoder.encode("987"), "alisher@com", firstUserRole);
         User secondUser = new User("Jazel", passwordEncoder.encode("654"), "jazel@com", secondUserRole);
 
-
         userService.saveUser(firstUser);
         userService.saveUser(secondUser);
-
-
     }
 }

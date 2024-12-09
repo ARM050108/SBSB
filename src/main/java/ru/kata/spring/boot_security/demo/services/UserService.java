@@ -19,6 +19,7 @@ public interface UserService {
     User findByUsername(String username);
 
     void setEncryptedPassword(User user);
+    public boolean existsByUsername(String username);
 
 
 }

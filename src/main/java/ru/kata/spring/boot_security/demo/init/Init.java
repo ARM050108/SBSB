@@ -9,8 +9,8 @@ import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.services.RoleService;
 import ru.kata.spring.boot_security.demo.services.UserService;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Component
 public class Init implements CommandLineRunner {
@@ -29,8 +29,8 @@ public class Init implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        List<Role> firstUserRole = new ArrayList<>();
-        List<Role> secondUserRole = new ArrayList<>();
+        Set<Role> firstUserRole = new HashSet<>();
+        Set<Role> secondUserRole = new HashSet<>();
 
         Role adminRole = new Role("ROLE_ADMIN");
         Role userRole = new Role("ROLE_USER");
@@ -44,10 +44,7 @@ public class Init implements CommandLineRunner {
         User firstUser = new User("Alisher", passwordEncoder.encode("987"), "alisher@com", firstUserRole);
         User secondUser = new User("Jazel", passwordEncoder.encode("654"), "jazel@com", secondUserRole);
 
-
         userService.saveUser(firstUser);
         userService.saveUser(secondUser);
-
-
     }
 }

@@ -9,15 +9,15 @@ import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.services.RoleService;
 import ru.kata.spring.boot_security.demo.services.UserService;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Component
 public class Init implements CommandLineRunner {
 
     private final PasswordEncoder passwordEncoder;
-    private RoleService roleService;
-    private UserService userService;
+    private final RoleService roleService;
+    private final UserService userService;
 
     @Autowired
     public Init(RoleService roleService, UserService userService, PasswordEncoder passwordEncoder) {
@@ -28,8 +28,8 @@ public class Init implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        List<Role> firstUserRole = new ArrayList<>();
-        List<Role> secondUserRole = new ArrayList<>();
+        Set<Role> firstUserRole = new HashSet<>();
+        Set<Role> secondUserRole = new HashSet<>();
 
         Role adminRole = new Role("ROLE_ADMIN");
         Role userRole = new Role("ROLE_USER");

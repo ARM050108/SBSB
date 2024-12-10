@@ -9,12 +9,13 @@ import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.repository.UserRepository;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @Transactional
 public class UserServiceImpl implements UserService {
-
 
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
@@ -27,13 +28,11 @@ public class UserServiceImpl implements UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-
     @Override
     @Transactional(readOnly = true)
     public List<User> findAll() {
         return userRepository.findAll();
     }
-
 
     @Override
     @Transactional(readOnly = true)
@@ -41,24 +40,24 @@ public class UserServiceImpl implements UserService {
         return userRepository.getById(id);
     }
 
-
     @Override
     public void saveUser(User user) {
+        if (userRepository.findByUsername(user.getUsername()) != null) {
+            throw new IllegalArgumentException("Username already exists");
+        }
         userRepository.save(user);
     }
 
     @Override
-    public void update(long id, User updatedUser, List<Role> roles) throws NullPointerException {
-        User localUser = userRepository.getById(id);
-
-        if (!localUser.getPassword().equals(updatedUser.getPassword())) {
-            localUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
-        }
-        localUser.setUsername(updatedUser.getUsername());
-        localUser.setEmail(updatedUser.getEmail());
-        localUser.setRoles(roles);
-
+    public void update(long id, User user, List<Role> roles) {
+        User existingUser = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+        existingUser.setUsername(user.getUsername());
+        existingUser.setPassword(user.getPassword());
+        existingUser.setEmail(user.getEmail());
+        existingUser.setRoles(new HashSet<>(roles));  // Роли должны быть Set, но метод принимает List
+        userRepository.save(existingUser);
     }
+
 
     @Override
     public void delete(Long id) {
@@ -70,7 +69,6 @@ public class UserServiceImpl implements UserService {
     public User findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
-
 
     @Override
     public void setEncryptedPassword(User user) {

@@ -11,21 +11,41 @@ import java.util.Objects;
 @Table(name = "roles")
 public class Role implements GrantedAuthority {
     @Id
+    @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name", nullable = false, unique = true)
+    @Column(name = "name")
     private String name;
 
-    public Role() {}
+    public Role() {
+    }
 
     public Role(String name) {
         this.name = name;
     }
 
-    @Override
-    public String getAuthority() {
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "users_roles",
+            joinColumns = @JoinColumn(name = "role_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private List<User> users = new ArrayList<>();
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getRole() {
         return name;
+    }
+
+    public void setRole(String name) {
+        this.name = name;
+    }
+
+    @Override // interface GrantedAuthority
+    public String getAuthority() {
+        return getRole();
     }
 
     @Override
@@ -33,7 +53,7 @@ public class Role implements GrantedAuthority {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Role role = (Role) o;
-        return Objects.equals(id, role.id) && Objects.equals(name, role.name);
+        return Objects.equals(id, role.id) && Objects.equals(role, role.name);
     }
 
     @Override
@@ -43,7 +63,10 @@ public class Role implements GrantedAuthority {
 
     @Override
     public String toString() {
-        return name;
+        return "Role{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", users=" + users +
+                '}';
     }
 }
-

@@ -12,4 +12,8 @@ public interface RoleService {
     void delete(Long id);
 
     List<Role> getDemandedRoles();
+
+    Role getRoleByName(String roleAdmin);
+
+    Role findByName(String roleAdmin);
 }

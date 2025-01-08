@@ -9,10 +9,12 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.repository.UserRepository;
 
+import java.util.Optional;
+
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    private final UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
     public UserDetailsServiceImpl(UserRepository userRepository) {
@@ -22,9 +24,15 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        // Извлекаем User из Optional с использованием orElseThrow
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-        return user;  // Возвращаем пользователя, так как он реализует UserDetails
+                .orElseThrow(() -> new UsernameNotFoundException("User " + username + " doesn't exist"));
+
+        return new org.springframework.security.core.userdetails.User(
+                user.getUsername(),
+                user.getPassword(),
+                user.getAuthorities()
+        );
     }
+
+
 }

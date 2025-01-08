@@ -3,6 +3,7 @@ package ru.kata.spring.boot_security.demo.services;
 import ru.kata.spring.boot_security.demo.models.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserService {
 
@@ -16,10 +17,10 @@ public interface UserService {
 
     void delete(Long id);
 
-    User findByUsername(String username);
+    Optional<User> findByUsername(String username);
 
     void setEncryptedPassword(User user);
-    public boolean existsByUsername(String username);
 
 
+    Object findByEmail(String s);
 }

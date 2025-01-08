@@ -19,8 +19,9 @@ public class RoleServiceImpl implements RoleService {
         this.roleRepository = roleRepository;
     }
 
-    @Transactional(readOnly = true)
+
     @Override
+    @Transactional(readOnly = true)
     public Role getRoleById(Long id) {
         return roleRepository.getById(id);
     }
@@ -39,5 +40,15 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public List<Role> getDemandedRoles() {
         return roleRepository.findAll();
+    }
+
+    @Override
+    public Role getRoleByName(String roleAdmin) {
+        return null;
+    }
+
+    @Override
+    public Role findByName(String roleAdmin) {
+        return null;
     }
 }

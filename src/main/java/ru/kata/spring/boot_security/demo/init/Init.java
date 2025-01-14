@@ -16,8 +16,8 @@ import java.util.List;
 public class Init implements CommandLineRunner {
 
     private final PasswordEncoder passwordEncoder;
-    private final RoleService roleService;
-    private final UserService userService;
+    private RoleService roleService;
+    private UserService userService;
 
     @Autowired
     public Init(RoleService roleService, UserService userService, PasswordEncoder passwordEncoder) {
@@ -41,21 +41,12 @@ public class Init implements CommandLineRunner {
         roleService.save(adminRole);
         roleService.save(userRole);
 
-        // Создаем пользователей
-        User firstUser = new User("Alisher", passwordEncoder.encode("987"), "alisher@com", firstUserRole);
-        User secondUser = new User("Jazel", passwordEncoder.encode("654"), "jazel@com", secondUserRole);
+        User firstUser = new User("Alisher", passwordEncoder.encode("123"), "alisher@com", firstUserRole);
+        User secondUser = new User("Jazel", passwordEncoder.encode("456"), "jazel@com", secondUserRole);
 
-        // Сохраняем пользователей
         userService.saveUser(firstUser);
         userService.saveUser(secondUser);
+
+
     }
 }
-
-
-
-
-
-
-
-
-

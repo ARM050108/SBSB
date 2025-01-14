@@ -25,7 +25,7 @@ public class Role implements GrantedAuthority {
         this.name = name;
     }
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "role_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
@@ -63,10 +63,9 @@ public class Role implements GrantedAuthority {
 
     @Override
     public String toString() {
-        return "Role{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", users=" + users +
-                '}';
+        if (name.contains("ROLE_USER")) {
+            return "USER";
+        }
+        return "ADMIN";
     }
 }

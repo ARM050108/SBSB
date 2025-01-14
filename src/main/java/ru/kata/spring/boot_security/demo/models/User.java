@@ -39,7 +39,7 @@ public class User implements UserDetails {
         this.roles = roles;
     }
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
@@ -80,7 +80,6 @@ public class User implements UserDetails {
     }
 
     public List<Role> getRoles() {
-        System.out.println("Вызов getRoles() для пользователя с ID: " + this.id);
         return roles;
     }
 
